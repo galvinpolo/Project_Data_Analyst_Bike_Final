@@ -32,7 +32,6 @@ min_date = day_df['dteday'].min()
 max_date = day_df['dteday'].max()
 
 with st.sidebar:
-    st.image("https://via.placeholder.com/150", caption="Profile Placeholder", use_column_width=True)
     st.header('Bike Sharing Dashboard')
     st.markdown("""
     **Explore bike-sharing data** with insights on seasonality, weather effects, and trends over time.
