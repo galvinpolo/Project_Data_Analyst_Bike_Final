@@ -3,12 +3,19 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 from babel.numbers import format_currency
+import os
 
 # Set the default style for seaborn
-sns.set(style='whitegrid')
+sns.set(style='ticks')
 
-# Load the datasets (update the paths if needed)
-day_df = pd.read_csv("dashboard/day.csv")
+# ----- Pastikan Path File Benar -----
+file_path = "dashboard/day.csv"  # Update path jika file berada di lokasi berbeda
+if not os.path.exists(file_path):
+    st.error(f"File tidak ditemukan di path: {file_path}")
+    raise FileNotFoundError(f"File tidak ditemukan: {file_path}")
+
+# Load the datasets
+day_df = pd.read_csv(file_path)
 
 # Convert the 'dteday' column to datetime
 day_df['dteday'] = pd.to_datetime(day_df['dteday'])
@@ -20,21 +27,17 @@ def create_daily_rentals_df(df):
     daily_rentals_df.rename(columns={'cnt': 'total_rentals'}, inplace=True)
     return daily_rentals_df
 
-def create_top_weather_conditions(df):
-    """Get the top weather conditions based on the number of rentals."""
-    top_weather_df = df.groupby('weathersit')['cnt'].sum().reset_index().sort_values(by='cnt', ascending=False)
-    top_weather_df.rename(columns={'cnt': 'total_rentals'}, inplace=True)
-    return top_weather_df
-
 # Sidebar configuration with date filter
 min_date = day_df['dteday'].min()
 max_date = day_df['dteday'].max()
 
 with st.sidebar:
-    # Add a logo or image (optional)
-    st.header('Galvin Suryo Asmoro')
-    # st.image("data/me.jpeg")
-    
+    st.image("https://via.placeholder.com/150", caption="Profile Placeholder", use_column_width=True)
+    st.header('Bike Sharing Dashboard')
+    st.markdown("""
+    **Explore bike-sharing data** with insights on seasonality, weather effects, and trends over time.
+    """)
+
     # Date filter input
     start_date, end_date = st.date_input(
         label='Select Date Range',
@@ -54,25 +57,29 @@ daily_rentals_df = create_daily_rentals_df(main_df)
 total_rentals = daily_rentals_df['total_rentals'].sum()
 
 # Header for the dashboard
-st.header('Bike Sharing Data Dashboard 🚴‍♂️')
+st.title('Bike Sharing Dashboard 🚲')
+st.markdown("""
+Discover insights on bike-sharing trends, seasonality effects, and weather influences using this interactive dashboard.
+""")
 
 # -------------------- Average Bike Use Across Seasons --------------------
-st.subheader('Average Bike Usage Across Seasons')
+st.subheader('1. Average Bike Usage Across Seasons')
 seasonal_usage = day_df.groupby('season')['cnt'].mean().reset_index()
 
 fig, ax = plt.subplots(figsize=(8, 6))
-sns.barplot(x='season', y='cnt', data=seasonal_usage, palette="Blues_d", ax=ax)
+palette = sns.color_palette("mako", len(seasonal_usage))
+sns.barplot(x='season', y='cnt', data=seasonal_usage, palette=palette, ax=ax)
 ax.set_xlabel('Season', fontsize=14)
-ax.set_ylabel('Average Bike Usage', fontsize=14)
-ax.set_title('Average Bike Usage Across Seasons', fontsize=16, fontweight='bold')
-ax.bar_label(ax.containers[0], label_type='edge', padding=3)
-ax.grid(axis='y')
+ax.set_ylabel('Average Rentals', fontsize=14)
+ax.set_title('Average Rentals by Season', fontsize=16, fontweight='bold')
+for container in ax.containers:
+    ax.bar_label(container, fmt='%.0f', padding=5, fontsize=10, color='black')
+sns.despine()
 st.pyplot(fig)
 
-
 # -------------------- Correlation between Weather Conditions and Bike Usage across Seasons --------------------
-# Function to calculate correlation between weather variables and bike usage for each season
 def calculate_correlations(df, season):
+    """Calculate correlations for a given season."""
     season_data = df[df['season'] == season]
     correlations = season_data[['temp', 'hum', 'windspeed', 'cnt']].corr()['cnt'].drop('cnt')
     return correlations
@@ -92,15 +99,18 @@ correlations_df = pd.DataFrame(correlations_by_season)
 correlations_transposed = correlations_df.T
 
 # Plot the heatmap
-st.subheader('Correlation between Weather Conditions and Bike Usage across Seasons')
+st.subheader('2. Correlation between Weather and Rentals by Season')
 fig, ax = plt.subplots(figsize=(10, 6))
-sns.heatmap(correlations_transposed, annot=True, cmap="coolwarm", center=0, linewidths=0.5, ax=ax)
-
-# Add titles and labels
-ax.set_title('Correlation between Weather Conditions and Bike Usage across Seasons', fontsize=14)
-ax.set_xlabel('Weather Conditions', fontsize=12)
-ax.set_ylabel('Seasons', fontsize=12)
+sns.heatmap(correlations_transposed, annot=True, cmap="viridis", linewidths=0.5, ax=ax)
+ax.set_title('Weather and Rentals Correlation by Season', fontsize=16, fontweight='bold')
+ax.set_xlabel('Weather Variables', fontsize=14)
+ax.set_ylabel('Seasons', fontsize=14)
 plt.tight_layout()
-
-# Display the heatmap in Streamlit
 st.pyplot(fig)
+
+# Descriptive Text Below Heatmap
+st.markdown("""
+**Interpretation:**
+- Positive correlations indicate that higher values of the weather variable lead to higher rentals.
+- Negative correlations suggest the opposite.
+""")
