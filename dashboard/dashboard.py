@@ -33,7 +33,7 @@ max_date = day_df['dteday'].max()
 with st.sidebar:
     # Add a logo or image (optional)
     st.header('Galvin Suryo Asmoro')
-    st.image("data/me.jpeg")
+    # st.image("data/me.jpeg")
     
     # Date filter input
     start_date, end_date = st.date_input(
