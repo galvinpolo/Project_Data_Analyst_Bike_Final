@@ -115,3 +115,38 @@ ax.text(
 # Adjust layout and show plot in Streamlit
 plt.tight_layout()
 st.pyplot(fig)
+
+# Define the season mapping
+season_mapping = {1: 'Winter', 2: 'Spring', 3: 'Summer', 4: 'Fall'}
+
+# Add a column for season names
+day_df['season_name'] = day_df['season'].replace(season_mapping)
+
+# Group the data by season and calculate the average bike usage
+average_usage_by_season = day_df.groupby('season_name')['cnt'].mean().reset_index()
+
+# Sort the seasons in order (if needed)
+season_order = ['Winter', 'Spring', 'Summer', 'Fall']
+average_usage_by_season['season_name'] = pd.Categorical(average_usage_by_season['season_name'], categories=season_order, ordered=True)
+average_usage_by_season = average_usage_by_season.sort_values('season_name')
+
+# Add this section to Streamlit
+st.subheader('How Does Bike Usage Vary Across Seasons?')
+
+# Plot the results using Streamlit
+fig, ax = plt.subplots(figsize=(8, 6))
+sns.barplot(x='season_name', y='cnt', data=average_usage_by_season, palette='viridis', ax=ax)
+
+# Add titles and labels
+ax.set_title('Average Bike Usage by Season', fontsize=16, fontweight='bold')
+ax.set_xlabel('Season', fontsize=14)
+ax.set_ylabel('Average Bike Usage', fontsize=14)
+
+# Show values on top of the bars
+for i, value in enumerate(average_usage_by_season['cnt']):
+    ax.text(i, value + 50, f'{value:.0f}', ha='center', fontsize=12)
+
+# Adjust layout and show the plot in Streamlit
+plt.tight_layout()
+st.pyplot(fig)
+
