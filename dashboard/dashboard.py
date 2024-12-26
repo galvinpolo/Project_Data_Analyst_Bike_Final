@@ -63,7 +63,7 @@ Discover insights on bike-sharing trends, seasonality effects, and weather influ
 """)
 
 # -------------------- How Correlation Across Seasons Helps Identify Bike Usage Trends --------------------
-st.subheader('How Correlation Across Seasons Helps Identify Bike Usage Trends Affected by Weather')
+st.subheader('1. How Correlation Across Seasons Helps Identify Bike Usage Trends Affected by Weather')
 
 # Define season mapping (assuming mapping of 1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter')
 season_mapping = {1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter'}
@@ -130,14 +130,14 @@ season_order = ['Winter', 'Spring', 'Summer', 'Fall']
 average_usage_by_season['season_name'] = pd.Categorical(average_usage_by_season['season_name'], categories=season_order, ordered=True)
 average_usage_by_season = average_usage_by_season.sort_values('season_name')
 
-# Add this section to Streamlit
-st.subheader('How Does Bike Usage Vary Across Seasons?')
+# -------------------- How Does Bike Usage Vary Across Seasons --------------------
+st.subheader('2. How Does Bike Usage Vary Across Seasons?')
 
 # Plot the results using Streamlit
 fig, ax = plt.subplots(figsize=(8, 6))
 sns.barplot(x='season_name', y='cnt', data=average_usage_by_season, palette='viridis', ax=ax)
 
-# Add titles and labels
+
 ax.set_title('Average Bike Usage by Season', fontsize=16, fontweight='bold')
 ax.set_xlabel('Season', fontsize=14)
 ax.set_ylabel('Average Bike Usage', fontsize=14)
