@@ -95,7 +95,7 @@ plt.tight_layout()
 st.pyplot(fig)  
 
 # -------------------- Korelasi Antar Musim dan Penggunaan Sepeda --------------------  
-st.subheader('2. Visualisasi korelasi antar musim membantu mengidentifikasi tren penggunaan sepeda yang dipengaruhi cuaca')  
+st.subheader('2. Korelasi antar musim membantu mengidentifikasi tren penggunaan sepeda yang dipengaruhi cuaca')  
 
 # Function to calculate correlation between weather variables and bike usage for each season  
 def calculate_correlations(df, season):  
