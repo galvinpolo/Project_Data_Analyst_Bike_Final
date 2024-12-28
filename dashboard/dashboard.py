@@ -63,7 +63,7 @@ Discover insights on bike-sharing trends, seasonality effects, and weather influ
 """)
 
 # -------------------- How Correlation Across Seasons Helps Identify Bike Usage Trends --------------------
-st.subheader('1. How Correlation Across Seasons Helps Identify Bike Usage Trends Affected by Weather')
+st.subheader('1. Visualisasi korelasi antar musim membantu mengidentifikasi tren penggunaan sepeda yang dipengaruhi cuaca')
 
 # Define season mapping (assuming mapping of 1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter')
 season_mapping = {1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter'}
@@ -131,7 +131,7 @@ average_usage_by_season['season_name'] = pd.Categorical(average_usage_by_season[
 average_usage_by_season = average_usage_by_season.sort_values('season_name')
 
 # -------------------- How Does Bike Usage Vary Across Seasons --------------------
-st.subheader('2. How Does Bike Usage Vary Across Seasons?')
+st.subheader('2. Pola penggunaan sepeda di setiap musim')
 
 # Plot the results using Streamlit
 fig, ax = plt.subplots(figsize=(8, 6))
