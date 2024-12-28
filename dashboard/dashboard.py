@@ -8,11 +8,11 @@ import os
 # Set the default style for seaborn
 sns.set(style='ticks')
 
-# ----- Pastikan Path File Benar -----
-file_path = "dashboard/day.csv"  # Update path jika file berada di lokasi berbeda
-if not os.path.exists(file_path):
-    st.error(f"File tidak ditemukan di path: {file_path}")
-    raise FileNotFoundError(f"File tidak ditemukan: {file_path}")
+# Mendapatkan path direktori saat ini
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Menggabungkan path dengan nama file
+file_path = os.path.join(current_dir, 'day.csv')
 
 # Load the datasets
 day_df = pd.read_csv(file_path)
@@ -58,9 +58,12 @@ total_rentals = daily_rentals_df['total_rentals'].sum()
 
 # Header for the dashboard
 st.title('Bike Sharing Dashboard 🚲')
+st.markdown("""
+Discover insights on bike-sharing trends, seasonality effects, and weather influences using this interactive dashboard.
+""")
 
 # -------------------- How Correlation Across Seasons Helps Identify Bike Usage Trends --------------------
-st.subheader('1. Visualisasi korelasi antar musim membantu mengidentifikasi tren penggunaan sepeda yang dipengaruhi cuaca')
+st.subheader('1.  Visualisasi korelasi antar musim membantu mengidentifikasi tren penggunaan sepeda yang dipengaruhi cuaca')
 
 # Define season mapping (assuming mapping of 1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter')
 season_mapping = {1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter'}
