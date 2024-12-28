@@ -58,9 +58,6 @@ total_rentals = daily_rentals_df['total_rentals'].sum()
 
 # Header for the dashboard
 st.title('Bike Sharing Dashboard 🚲')
-st.markdown("""
-Discover insights on bike-sharing trends, seasonality effects, and weather influences using this interactive dashboard.
-""")
 
 # -------------------- How Correlation Across Seasons Helps Identify Bike Usage Trends --------------------
 st.subheader('1. Visualisasi korelasi antar musim membantu mengidentifikasi tren penggunaan sepeda yang dipengaruhi cuaca')
