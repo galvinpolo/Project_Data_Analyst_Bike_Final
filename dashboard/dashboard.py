@@ -86,6 +86,28 @@ correlations_df = pd.DataFrame(correlations_by_season)
 # Transpose the correlation dataframe for better visualization (seasons as columns)
 correlations_transposed = correlations_df.T
 
+
+# -------------------- How Does Bike Usage Vary Across Seasons --------------------
+st.subheader('2. Pola penggunaan sepeda di setiap musim')
+
+# Plot the results using Streamlit
+fig, ax = plt.subplots(figsize=(8, 6))
+sns.barplot(x='season_name', y='cnt', data=average_usage_by_season, palette='viridis', ax=ax)
+
+
+ax.set_title('Average Bike Usage by Season', fontsize=16, fontweight='bold')
+ax.set_xlabel('Season', fontsize=14)
+ax.set_ylabel('Average Bike Usage', fontsize=14)
+
+# Show values on top of the bars
+for i, value in enumerate(average_usage_by_season['cnt']):
+    ax.text(i, value + 50, f'{value:.0f}', ha='center', fontsize=12)
+
+# Adjust layout and show the plot in Streamlit
+plt.tight_layout()
+st.pyplot(fig)
+
+
 # Plot the heatmap
 fig, ax = plt.subplots(figsize=(12, 8))
 sns.heatmap(
@@ -130,23 +152,5 @@ season_order = ['Winter', 'Spring', 'Summer', 'Fall']
 average_usage_by_season['season_name'] = pd.Categorical(average_usage_by_season['season_name'], categories=season_order, ordered=True)
 average_usage_by_season = average_usage_by_season.sort_values('season_name')
 
-# -------------------- How Does Bike Usage Vary Across Seasons --------------------
-st.subheader('2. Pola penggunaan sepeda di setiap musim')
 
-# Plot the results using Streamlit
-fig, ax = plt.subplots(figsize=(8, 6))
-sns.barplot(x='season_name', y='cnt', data=average_usage_by_season, palette='viridis', ax=ax)
-
-
-ax.set_title('Average Bike Usage by Season', fontsize=16, fontweight='bold')
-ax.set_xlabel('Season', fontsize=14)
-ax.set_ylabel('Average Bike Usage', fontsize=14)
-
-# Show values on top of the bars
-for i, value in enumerate(average_usage_by_season['cnt']):
-    ax.text(i, value + 50, f'{value:.0f}', ha='center', fontsize=12)
-
-# Adjust layout and show the plot in Streamlit
-plt.tight_layout()
-st.pyplot(fig)
 
